@@ -11,9 +11,11 @@ export class TodoItem {
 
 	showDetails() {
 		console.log(
-			`${chalk.hex("#8F1537").bold("*")}  ${chalk.whiteBright.bold(
-				this.task
-			)}.\t${this.isComplete ? chalk.grey.bold("(completed)") : ""}`
+			`${chalk.hex("#FFA62F").bold("*")}  ${chalk
+				.hex("#FFE8C8")
+				.bold(this.task)}.\t${
+				this.isComplete ? chalk.grey.bold("(completed)") : ""
+			}`
 		);
 	}
 }

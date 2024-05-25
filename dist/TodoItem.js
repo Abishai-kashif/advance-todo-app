@@ -10,6 +10,8 @@ export class TodoItem {
         // no statement needed
     }
     showDetails() {
-        console.log(`${chalk.hex("#8F1537").bold("*")}  ${chalk.whiteBright.bold(this.task)}.\t${this.isComplete ? chalk.grey.bold("(completed)") : ""}`);
+        console.log(`${chalk.hex("#FFA62F").bold("*")}  ${chalk
+            .hex("#FFE8C8")
+            .bold(this.task)}.\t${this.isComplete ? chalk.grey.bold("(completed)") : ""}`);
     }
 }

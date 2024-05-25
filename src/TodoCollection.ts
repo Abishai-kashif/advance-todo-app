@@ -10,6 +10,7 @@ type ItemCountsType = {
 export class TodoCollection {
 	private nextId: number = 1;
 	protected mapItems = new Map<number, TodoItem>();
+
 	constructor(public userName: string, public todoItems: TodoItem[] = []) {
 		todoItems.forEach((item) => this.mapItems.set(item.id, item));
 	}

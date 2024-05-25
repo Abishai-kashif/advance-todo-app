@@ -1,20 +1,20 @@
-import { TodoItem } from "./TodoItem.js";
 import { JsonTodoCollection } from "./jsonTodoCollection.js";
 import inquirer from "inquirer";
 import chalk from "chalk";
-let todos = [
-    new TodoItem(1, "Reading a book", true),
-    new TodoItem(2, "Coding"),
-    new TodoItem(3, "washing face"),
-];
+const COLOR_ORANGISH = "#FFE8C8";
+let todos = [];
 let collection = new JsonTodoCollection("Abishai", todos);
 let showCompleted = true;
 function displayTodo() {
     console.clear();
-    console.log(chalk.whiteBright.bold.italic(`\n\t\t${collection.userName}'s Todo List ` +
+    console.log(chalk
+        .hex("#F1F1F1")
+        .bold.italic(`\n\t\t    ${collection.userName.trim()}'s Todo List ` +
         `(${collection.itemCount().incomplete} items to do) :`));
-    console.log(chalk.grey.bold("\t\t------------------------------------\n"));
-    collection.getTodoItems(showCompleted).forEach((item) => item.showDetails());
+    console.log(chalk.grey.bold("\t\t<<<-------------------------------------->>>\n\n"));
+    collection
+        .getTodoItems(showCompleted)
+        .forEach((item) => item.showDetails());
 }
 // enum for commands
 var commands;
@@ -23,6 +23,7 @@ var commands;
     commands["Complete"] = "Complete Task";
     commands["Toggle"] = "Show/Hide Completed";
     commands["Purge"] = "Remove Completed Tasks";
+    commands["Name"] = "Change User Name";
     commands["Quit"] = "Quit";
 })(commands || (commands = {}));
 // func for add task command
@@ -32,7 +33,7 @@ function promptAdd() {
         .prompt({
         name: "task",
         type: "input",
-        message: "Enter a task :",
+        message: chalk.hex(COLOR_ORANGISH).bold("Enter a task :"),
     })
         .then((answer) => {
         if (answer.task !== "") {
@@ -48,7 +49,7 @@ function promptComplete() {
         .prompt({
         type: "checkbox",
         name: "complete",
-        message: "Mark Tasks Completed :",
+        message: chalk.hex(COLOR_ORANGISH).bold("Mark Tasks Completed :"),
         choices: collection.getTodoItems(showCompleted).map((item) => ({
             name: item.task,
             value: item.id,
@@ -57,17 +58,27 @@ function promptComplete() {
     })
         .then((answers) => {
         if (answers.complete) {
-            try {
-                let completedTasks = answers.complete; /* telling typescript that answers["complete"] is an array of numbers
+            let completedTasks = answers.complete; /* telling typescript that answers["complete"] is an array of numbers
                                             using type assertion(it tells tsc to expect an array of numbers)*/
-                collection.getTodoItems(true).forEach((item) => {
-                    collection.markComplete(item.id, completedTasks.find((id) => id === item.id) !== undefined);
-                });
-            }
-            catch (e) {
-                console.log("Something went wrong. Please try again");
-            }
+            collection.getTodoItems(true).forEach((item) => {
+                collection.markComplete(item.id, completedTasks.find((id) => id === item.id) !==
+                    undefined);
+            });
         }
+        promptUser();
+    });
+}
+// func for change the owner name
+function promptName() {
+    console.clear();
+    inquirer
+        .prompt({
+        name: "name",
+        type: "input",
+        message: chalk.hex(COLOR_ORANGISH).bold("Enter your name :"),
+    })
+        .then((ans) => {
+        collection.userName = ans.name || "Anonymous";
         promptUser();
     });
 }
@@ -79,7 +90,7 @@ function promptUser() {
         .prompt({
         name: "command",
         type: "list",
-        message: chalk.hex("#94FFD8").bold("Choose Options :"),
+        message: chalk.hex("#ACD793").bold("Choose Options :"),
         choices: Object.values(commands),
     })
         .then((ans) => {
@@ -102,6 +113,9 @@ function promptUser() {
             case commands.Purge:
                 collection.removeCompleted();
                 promptUser();
+                break;
+            case commands.Name:
+                promptName();
                 break;
             default:
                 process.exit(0);
