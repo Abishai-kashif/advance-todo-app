@@ -1,5 +1,3 @@
-#! /usr/bin/env node
-
 import { TodoItem } from "./TodoItem.js";
 import { TodoCollection } from "./TodoCollection.js";
 import { JsonTodoCollection } from "./jsonTodoCollection.js";
