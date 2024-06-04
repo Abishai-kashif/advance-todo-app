@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import { JsonTodoCollection } from "./jsonTodoCollection.js";
 import inquirer from "inquirer";
 import chalk from "chalk";
